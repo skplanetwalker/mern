@@ -11,3 +11,8 @@ console.log(myfunctiona);
 var Myinstance = require('./myinstance');
 var i = new Myinstance();
 console.log(i.name);
+
+var Car = require('./Car');
+var c =  Object.create(Car.prototype);
+Car.call(c);
+c.log();
