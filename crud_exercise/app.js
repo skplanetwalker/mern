@@ -5,6 +5,13 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+//flash  메시지 관련
+var flash = require('connect-flash');
+
+//passport 로그인 관련
+var passport = require('passport');
+var session = require('express-session');
+
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 var autoIncrement = require('mongoose-auto-increment');
@@ -38,6 +45,23 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/uploads', express.static('uploads'));
+
+//session 관련 셋팅
+app.use(session({
+    secret: 'skplanetwalker',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 2000 * 60 * 60 //지속시간 2시간
+    }
+}));
+
+//passport 적용
+app.use(passport.initialize());
+app.use(passport.session());
+
+//플래시 메시지 관련
+app.use(flash());
 
 app.use('/', index);
 app.use('/users', users);
