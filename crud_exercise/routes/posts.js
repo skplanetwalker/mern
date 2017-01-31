@@ -59,9 +59,14 @@ router.post('/write', csrfProtection, function(req, res) {
         title : req.body.title,
         content : req.body.content
     });
-    Post.save(function(err) {
-        res.redirect('/posts');
-    });
+    var validationError = Post.validateSync();
+    if (validationError) {
+        res.send(validationError);
+    } else {
+        Post.save(function(err) {
+            res.redirect('/posts');
+        })
+    }
 });
 
 router.get('/edit/:id', parseForm, csrfProtection, function(req, res) {
