@@ -5,6 +5,18 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var mongoose = require('mongoose');
+var autoIncrement = require('mongoose-auto-increment');
+
+var db = mongoose.connection;
+db.on('error', console.error);
+db.once('open', function() {
+    console.log("MongoDB connect");
+});
+
+var connect = mongoose.connect('mongodb://127.0.0.1/post');
+autoIncrement.initialize(connect);
+
 var index = require('./routes/index');
 var users = require('./routes/users');
 
