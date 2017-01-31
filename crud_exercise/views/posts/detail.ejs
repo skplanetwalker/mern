@@ -8,6 +8,13 @@
             작성일 :
             <%=post.getDate.year%>-<%=post.getDate.month%>-<%=post.getDate.day%>
         </p>
+
+        <% if(post.thumbnail){%>
+        <p>
+            <img src="/uploads/<%=post.thumbnail%>" style="max-width: 100%"/>
+        </p>
+        <% } %>
+
         <%=post.content%>
 
         <hr />

@@ -3,6 +3,22 @@ var router = express.Router();
 var PostModel = require('../models/PostModel');
 var CommentModel = require('../models/CommentModel');
 
+var path = require('path');
+var uploadDir = path.join( __dirname , '../uploads' );
+var fs = require('fs');
+
+//multer 셋팅
+var multer  = require('multer');
+var storage = multer.diskStorage({
+    destination : function (req, file, callback) {
+        callback(null, '/tmp/uploads');
+    },
+    filename : function (req, file, callback) {
+        callback(null, 'posts-' + Date.now() + '.'+ file.mimetype.split('/')[1] );
+    }
+});
+var upload = multer({ storage: storage });
+
 // csrf 셋팅
 var csrf = require('csurf');
 var csrfProtection = csrf({ cookie: true });
@@ -54,17 +70,24 @@ router.get('/write', parseForm, csrfProtection, function(req, res) {
     res.render('posts/edit', { post : post, csrfToken: req.csrfToken() });
 });
 
-router.post('/write', csrfProtection, function(req, res) {
+router.post('/write', upload.single('thumbnail'), csrfProtection, function(req, res) {
     var Post = new PostModel({
         title : req.body.title,
-        content : req.body.content
+        content : req.body.content,
+        thumbnail : (req.file) ? req.file.filename : ""
     });
     var validationError = Post.validateSync();
     if (validationError) {
         res.send(validationError);
     } else {
         Post.save(function(err) {
-            res.redirect('/posts');
+            if(req.file){
+                fs.rename( req.file.path , uploadDir +'/' + req.file.filename , function (err){
+                    res.redirect('/posts');
+                });
+            }else{
+                res.redirect('/posts');
+            }
         })
     }
 });
@@ -75,13 +98,23 @@ router.get('/edit/:id', parseForm, csrfProtection, function(req, res) {
     });
 });
 
-router.post('/edit/:id', csrfProtection, function(req, res) {
-    var query = {
-        title : req.body.title,
-        content : req.body.content
-    };
-    PostModel.update( { id : req.params.id }, { $set : query }, function(err) {
-        res.redirect('/posts');
+router.post('/edit/:id', upload.single('thumbnail'), csrfProtection, function(req, res){
+    //그 이전 파일명을 먼저 받아온다.
+    PostModel.findOne( {id : req.params.id} , function(err, post){
+        var query = {
+            title : req.body.title,
+            content : req.body.content,
+            thumbnail : (req.file) ? req.file.filename : post.thumbnail
+        };
+        PostModel.update({ id : req.params.id }, { $set : query } , function(err){
+            if(req.file){
+                fs.rename( req.file.path , uploadDir + '/' + req.file.filename , function (err){
+                    res.redirect('/posts');
+                });
+            }else{
+                res.redirect('/posts');
+            }
+        });
     });
 });
 
