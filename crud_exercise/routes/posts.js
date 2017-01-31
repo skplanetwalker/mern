@@ -101,6 +101,10 @@ router.get('/edit/:id', parseForm, csrfProtection, function(req, res) {
 router.post('/edit/:id', upload.single('thumbnail'), csrfProtection, function(req, res){
     //그 이전 파일명을 먼저 받아온다.
     PostModel.findOne( {id : req.params.id} , function(err, post){
+        if (req.file) { //요청중에 파일이 존재 할시 지운다.
+            fs.unlinkSync(uploadDir + '/' + post.thumbnail);
+        }
+
         var query = {
             title : req.body.title,
             content : req.body.content,
