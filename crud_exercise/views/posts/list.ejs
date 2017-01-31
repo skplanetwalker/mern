@@ -1,0 +1,20 @@
+<% include ../header.ejs %>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>제목</th>
+            <th>날짜</th>
+            <th>삭제</th>
+        </tr>
+        <% postList.forEach(function(post){%>
+        <tr>
+            <td><a href="/posts/detail/<%=post.id%>"><%=post.title%></a></td>
+            <td><%=post.getDate.year%>-<%=post.getDate.month%>-<%=post.getDate.day%></td>
+            <td><a href="/posts/delete/<%=post.id%>" onclick="return confirm('삭제하시겠습니까?')" class="btn btn-danger">삭제</a></td>
+        </tr>
+        <% }); %>
+    </table>
+    <div>
+        <a href="/posts/write" class="btn btn-primary">글작성하기</a>
+    </div>
+<% include ../footer.ejs %>

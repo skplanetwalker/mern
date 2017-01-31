@@ -1,0 +1,19 @@
+<% include ../header.ejs %>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        제목 : <%=post.title%>
+    </div>
+    <div class="panel-body">
+        <p>
+            작성일 :
+            <%=post.getDate.year%>-<%=post.getDate.month%>-<%=post.getDate.day%>
+        </p>
+        <%=post.content%>
+    </div>
+</div>
+<div class="container" style="margin-top:20px;">
+    <a href="/posts" class="btn btn-primary">목록으로</a>
+    <a href="/posts/edit/<%=post.id%>" class="btn btn-default">수정</a>
+    <a href="/posts/delete/<%=post.id%>" class="btn btn-danger" onclick="return confirm('삭제하시겠습니까?')">삭제</a>
+</div>
+<% include ../footer.ejs %>
