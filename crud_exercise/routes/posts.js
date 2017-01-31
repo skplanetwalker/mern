@@ -3,22 +3,28 @@ var router = express.Router();
 var PostModel = require('../models/PostModel');
 var CommentModel = require('../models/CommentModel');
 
+// csrf 셋팅
+var csrf = require('csurf');
+var csrfProtection = csrf({ cookie: true });
+var bodyParser = require('body-parser');
+var parseForm = bodyParser.urlencoded({ extended: false });
+
 router.get('/', function(req, res) {
     PostModel.find({}, function(err, postList) {
         res.render('posts/list', { postList : postList });
     });
 });
 
-router.get('/detail/:id', function(req, res) {
+router.get('/detail/:id', csrfProtection, function(req, res) {
     PostModel.findOne({ id : req.params.id}, function(err, post) {
         CommentModel.find({ post_id : req.params.id } , function(err, comments){
-            res.render('posts/detail', { post: post , comments : comments });
+            res.render('posts/detail', { post: post , comments : comments , csrfToken : req.csrfToken() });
         });
 
     });
 });
 
-router.post('/ajax_comment/insert', function(req, res){
+router.post('/ajax_comment/insert', parseForm, csrfProtection, function(req, res){
     if(req.xhr){ //ajax 일때만 응답
         var Comment = new CommentModel({
             content : req.body.content,
@@ -43,12 +49,12 @@ router.post('/ajax_comment/delete', function(req, res){
     }
 });
 
-router.get('/write', function(req, res) {
+router.get('/write', parseForm, csrfProtection, function(req, res) {
     var post = {};
-    res.render('posts/edit', { post : post});
+    res.render('posts/edit', { post : post, csrfToken: req.csrfToken() });
 });
 
-router.post('/write', function(req, res) {
+router.post('/write', csrfProtection, function(req, res) {
     var Post = new PostModel({
         title : req.body.title,
         content : req.body.content
@@ -58,13 +64,13 @@ router.post('/write', function(req, res) {
     });
 });
 
-router.get('/edit/:id', function(req, res) {
+router.get('/edit/:id', parseForm, csrfProtection, function(req, res) {
     PostModel.findOne({ id : req.params.id }, function(err, post) {
-        res.render('posts/edit', { post : post });
+        res.render('posts/edit', { post : post, csrfToken: req.csrfToken() });
     });
 });
 
-router.post('/edit/:id', function(req, res) {
+router.post('/edit/:id', csrfProtection, function(req, res) {
     var query = {
         title : req.body.title,
         content : req.body.content
@@ -74,7 +80,7 @@ router.post('/edit/:id', function(req, res) {
     });
 });
 
-router.get('/delete/:id', function(req, res) {
+router.get('/delete/:id', parseForm, function(req, res) {
     PostModel.remove({ id : req.params.id }, function(err) {
         res.redirect('/posts');
     });
