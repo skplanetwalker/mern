@@ -49,14 +49,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static('uploads'));
 
 //session 관련 셋팅
-app.use(session({
+var sessionMiddleWare = session({
     secret: 'skplanetwalker',
     resave: false,
     saveUninitialized: true,
     cookie: {
-      maxAge: 2000 * 60 * 60 //지속시간 2시간
+        maxAge: 2000 * 60 * 60 //지속시간 2시간
     }
-}));
+});
+app.use(sessionMiddleWare);
 
 //passport 적용
 app.use(passport.initialize());
@@ -106,6 +107,10 @@ app.io = require('socket.io')();
  console.log('socketio connected...');
  });
  */
+//socket io passport 접근하기 위한 미들웨어 적용
+app.io.use(function(socket, next){
+    sessionMiddleWare(socket.request, socket.request.res, next);
+});
 require('./libs/socketConnection')(app.io);
 
 
