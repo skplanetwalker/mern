@@ -15,6 +15,10 @@
         <% }); %>
     </table>
     <div>
-        <a href="/posts/write" class="btn btn-primary">글작성하기</a>
+        <%if(isLogin){%>
+            <a href="/posts/write" class="btn btn-primary">글작성하기</a>
+        <%}else{%>
+            <a href="/accounts/login" class="btn btn-primary">글작성하기</a>
+        <%}%>
     </div>
 <% include ../footer.ejs %>
