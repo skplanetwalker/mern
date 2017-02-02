@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>Hello React</title>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://fb.me/react-15.0.0.js"></script>
+<script src="https://fb.me/react-dom-15.0.0.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+<script type="text/babel">
+    //Hello 컴포넌트를 만든다
+    var Hello = React.createClass({
+        render: function() {
+            return (
+                    <p>Hello, React!</p>//return 안에 태그를 작성
+
+            )
+        }
+    });
+
+    //Hello 컴포넌트를 root 에 붙인다.
+    ReactDOM.render(
+            <Hello/>,
+        document.getElementById('root')
+    );
+</script>
+</body>
+</html>
