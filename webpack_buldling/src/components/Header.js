@@ -7,7 +7,7 @@ class Header extends React.Component {
 
     render() {
         return(
-            <div>Header Component! <button onClick={this.myClick}>클릭</button></div>
+            <div>Header Component! <button onClick={this.myClick}>{this.props.title}</button></div>
         );
     }
 }

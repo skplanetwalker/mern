@@ -5,7 +5,7 @@ class App extends React.Component {
     render(){
         return (
             <div>
-                <Header />
+                <Header title="사이트 타이틀입니다." />
                 <h1>Hello React!</h1>
             </div>
         );
