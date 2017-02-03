@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
+import { Link } from 'react-router';
 
 class Posts extends React.Component {
 
@@ -32,7 +33,7 @@ class Posts extends React.Component {
                 {this.state.posts.map((post , key) => {
                     return (
                         <tr key={ key }>
-                            <td>{ post.title }</td>
+                            <td><Link to={`/posts/${key}`}>{ post.title }</Link></td>
                             <td>{ post.created_at }</td>
                             <td></td>
                         </tr>
