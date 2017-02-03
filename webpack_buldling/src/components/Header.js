@@ -22,8 +22,14 @@ class Header extends React.Component {
     }
 
     render() {
+        let styles = {
+            color : "red",
+            fontSize : "20px",
+            fontWeight: "bold"
+        };
+
         return(
-            <div>{this.state.title} <button onClick={this.myClick}>{this.props.title}</button></div>
+            <div style={styles}>{this.state.title} <button onClick={this.myClick}>{this.props.title}</button></div>
         );
     }
 }
