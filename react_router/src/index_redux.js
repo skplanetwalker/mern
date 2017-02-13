@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
+import { connect, Provider   } from 'react-redux';
 
 // action 생성
 function input(message) {
@@ -41,10 +42,9 @@ class Form extends React.Component {
         });
     }
 
-    // dispatch 적용
     submit(){
         let message = this.state.textInput;
-        this.props.store.dispatch( input(message) );
+        this.props.updateMessage( message );
     }
 
     render() {
@@ -57,27 +57,43 @@ class Form extends React.Component {
     }
 }
 
-// 저장소 참조하는 부분 작성
-const Answer = (props) => {
+let mapDispatchToProps = (dispatch) => {
+    return {
+        updateMessage : (value) => dispatch( input(value) )
+    }
+};
+Form = connect(undefined, mapDispatchToProps)(Form);
+
+
+let Answer = (props) => {
     return (
-        <h1>{ props.store.getState().message}</h1>
+        <h1>{ props.message}</h1>
     );
 };
 
-// dispatch 발생시 뷰를 다시 그리는 subscribe 작성
+let mapStateToProps = (state) => {
+    return {
+        message: state.message
+    };
+}
+
+Answer = connect(mapStateToProps)(Answer);
+
+
+
 const App = () => {
     return (
         <div>
-            <Form store={store}/>
-            <Answer store={store}/>
+            <Form />
+            <Answer />
         </div>
     );
 };
 
-const render = () => {
-    const rootElement = document.getElementById('root');
-    ReactDOM.render(<App store={store}/>, rootElement);
-};
 
-store.subscribe(render);
-render();
+const rootElement = document.getElementById('root');
+ReactDOM.render(
+    <Provider store = {store}>
+        <App />
+    </Provider>
+    , rootElement);
