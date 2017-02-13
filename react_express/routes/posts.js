@@ -34,6 +34,13 @@ router.get( '/' , (req, res) => {
     });
 });
 
+router.get( '/list' , (req, res) => {
+    PostModel.find( { } , (err , posts) => {
+        res.json( { posts : posts } );
+    });
+});
+
+
 router.get('/detail/:id', csrfProtection , function(req, res){
     var post;
     PostModel.findOne( { 'id' :  req.params.id }).exec().then(function(data) {
