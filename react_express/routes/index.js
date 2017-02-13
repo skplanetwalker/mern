@@ -4,9 +4,7 @@ var PostModel = require('../models/PostModel');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    PostModel.find({} , function(err, posts){
-        res.render('./index', { posts : posts });
-    });
+    res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
 });
 
 module.exports = router;
