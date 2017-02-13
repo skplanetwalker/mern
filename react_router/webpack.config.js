@@ -1,6 +1,6 @@
 module.exports = {
     devtool : 'eval-source-map',
-    entry: './src/index_redux.js',
+    entry: './src/index.js',
 
     output: {
         path: __dirname + '/public/',

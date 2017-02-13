@@ -21,26 +21,29 @@ class Posts extends React.Component {
 
     render(){
         return (
-            <Table bordered hover>
-                <thead>
-                <tr>
-                    <th>제목</th>
-                    <th>날짜</th>
-                    <th>삭제</th>
-                </tr>
-                </thead>
-                <tbody>
-                {this.state.posts.map((post , key) => {
-                    return (
-                        <tr key={ key }>
-                            <td><Link to={`/posts/${key}`}>{ post.title }</Link></td>
-                            <td>{ post.created_at }</td>
-                            <td></td>
+            <div>
+                <Table bordered hover>
+                    <thead>
+                        <tr>
+                            <th>제목</th>
+                            <th>날짜</th>
+                            <th>삭제</th>
                         </tr>
-                    );
-                })}
-                </tbody>
-            </Table>
+                    </thead>
+                    <tbody>
+                        {this.state.posts.map((post , key) => {
+                            return (
+                                <tr key={ key }>
+                                    <td><Link to={`/posts/${key}`}>{ post.title }</Link></td>
+                                    <td>{ post.created_at }</td>
+                                    <td></td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </Table>
+                {this.props.children}
+            </div>
         );
     }
 }
