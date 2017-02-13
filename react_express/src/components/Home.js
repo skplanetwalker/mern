@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import Gallery from './Gallery';
 
 class Home extends React.Component {
 
@@ -29,12 +30,7 @@ class Home extends React.Component {
 
         return (
             <div>
-                <h2>Home123231443</h2>
-                {this.state.posts.map((post , key) => {
-                    return (
-                        <p key={ key }>{ post.title }</p>
-                    );
-                })}
+                <Gallery posts={ this.state.posts }/>
             </div>
         );
     }
