@@ -1,11 +1,21 @@
+var webpack = require('webpack');
+
 module.exports = {
-    devtool : 'eval-source-map',
     entry: './src/index.js',
 
     output: {
         path: __dirname + '/public/',
         filename: 'bundle.js'
     },
+
+    plugins: [
+        new webpack.optimize.UglifyJsPlugin({
+            compressor: {
+                warnings: false,
+            },
+        }),
+        new webpack.optimize.OccurenceOrderPlugin()
+    ],
 
     devServer: {
         port: 3000,
